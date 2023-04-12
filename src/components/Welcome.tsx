@@ -1,13 +1,34 @@
 import React from "react";
 import GoogleSignIn from "../images/google-signin.png";
-import { auth } from "../firebase";
-import { GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
+import { auth, db } from "../firebase";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { IUser } from "../interface/interface";
 
 const Welcome: React.FC = () => {
-
-  const googleSignIn = () => {
+  const googleSignIn = async () => {
     const provider: GoogleAuthProvider = new GoogleAuthProvider();
-    signInWithRedirect(auth, provider);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user: IUser = {
+        name: result.user.displayName,
+        avatar: result.user.photoURL,
+        createdAt: serverTimestamp(),
+        uid: result.user.uid,
+      };
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          name: user.name,
+          avatar: user.avatar,
+          createdAt: serverTimestamp(),
+          uid: user.uid,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -24,6 +45,6 @@ const Welcome: React.FC = () => {
       </button>
     </main>
   );
-}
+};
 
 export default Welcome;

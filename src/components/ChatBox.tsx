@@ -11,9 +11,12 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { IMessage } from "../interface/interface";
+import { IUser } from "../interface/interface";
+import { User } from "./Users";
 
 const ChatBox: React.FC = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [users, setUsers] = useState<IUser[]>([]);
   
   useEffect((): (() => void) => {
     const q = query(
@@ -38,17 +41,45 @@ const ChatBox: React.FC = () => {
     return ():void => unsubscribe();
   }, []);
 
+  useEffect((): (() => void) => {
+    const q = query(
+      collection(db, "users"),
+      orderBy("createdAt"),
+      limit(50)
+    );
+    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+      let users: IUser[] = [];
+      QuerySnapshot.forEach((doc) => {
+        users.push({
+          avatar: doc.data().avatar,
+          name: doc.data().name,
+          createdAt: doc.data().createdAt,
+          uid: doc.data().uid,
+        })
+      });
+      setUsers(users);
+    });
+    return ():void => unsubscribe();
+  }, []);
+
   const scroll: React.MutableRefObject<HTMLSpanElement | null> = useRef(null);
 
   return (
     <main className="chat-box">
-      <div className="messages-wrapper">
-        {messages?.map((message) => (
-          <Message key={message.id} message={message} />
+      <div  className="user-list">
+        {users?.map((user) => (
+          <User key={user.uid} user={user} />
         ))}
       </div>
-      <span ref={scroll}></span>
-      <SendMessage scroll={scroll} />
+      <div className="message-window">
+        <div className="messages-wrapper">
+          {messages?.map((message) => (
+            <Message key={message.id} message={message} />
+          ))}
+        </div>
+        <span ref={scroll}></span>
+        <SendMessage scroll={scroll} />
+      </div>
     </main>
   );
 };

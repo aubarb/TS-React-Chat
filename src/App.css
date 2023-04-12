@@ -63,7 +63,28 @@ input {
   margin-bottom: 20px;
 }
 
-/* chat component */
+/* chat-box */
+.chat-box {
+  display: flex;
+  height: 100%;
+  border: 3px solid green;
+}
+
+/* user list */
+.user-list {
+  height: 100%;
+  width: 20%;
+  border: 1px solid red;
+}
+
+/* chat box */
+.message-window {
+  height: 100%;
+  width: 80%;
+  border: 1px solid red;
+}
+
+/* message component */
 .messages-wrapper {
   padding: 30px;
   margin-bottom: 60px;
@@ -110,7 +131,7 @@ input {
 .send-message {
   position: fixed;
   bottom: 0px;
-  width: 100%;
+  width: 80%;
   padding: 20px 30px;
   background-color: #4c768d;
   display: flex;
