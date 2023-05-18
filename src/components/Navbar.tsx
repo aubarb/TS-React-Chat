@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { auth } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
+import Logo from "../images/logo.png";
 
 const NavBar: React.FC = () => {
   const { currentUser } = useContext(AuthContext);
@@ -11,7 +12,7 @@ const NavBar: React.FC = () => {
 
   return (
     <nav className="navbar">
-      <span className="logo">Logo</span>
+      <img className="logo" src={Logo} alt="logo" />
       <div className="user">
         <img
           src={currentUser?.photoURL ?? "/default-avatar.png"}

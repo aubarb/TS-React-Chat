@@ -3,6 +3,7 @@ import { IMessage } from "../interface/interface";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext, ChatContextType } from "../context/ChatContext";
 
+
 interface MessageProps {
   message: IMessage;
 }

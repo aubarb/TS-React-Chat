@@ -5,6 +5,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { IUser } from "../interface/interface";
 import { useNavigate } from "react-router-dom";
+import Logo from "../images/logo.png"
 
 const Welcome: React.FC = () => {
   const navigate = useNavigate();
@@ -45,10 +46,10 @@ const Welcome: React.FC = () => {
 
   return (
     <main className="welcome">
-      <h2>Welcome to React Chat.</h2>
-      <img src="/logo512.png" alt="ReactJs logo" width={50} height={50} />
-      <p>Sign in with Google to chat with with your fellow React Developers.</p>
-      <button className="sign-in">
+      <img src={Logo} alt="logo" width={50} height={50} />
+      <h1>Welcome to Aurèle Chat</h1>
+      <p>Sign in with Google to chat with with your friends!</p>
+      <button className="signIn">
         <img
           onClick={googleSignIn}
           src={GoogleSignIn}
