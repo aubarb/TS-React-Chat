@@ -1,22 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
 import { auth } from "../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { AuthContext } from "../context/AuthContext";
 
 const NavBar: React.FC = () => {
-  const [user] = useAuthState(auth);
+  const { currentUser } = useContext(AuthContext);
 
-  const signOut = ():void => {
+  const signOut = (): void => {
     auth.signOut();
   };
-  
+
   return (
-    <nav className="nav-bar">
-      <h1>React Chat</h1>
-      {user ? (
-        <button onClick={signOut} className="sign-out" type="button">
-          Sign Out
+    <nav className="navbar">
+      <span className="logo">Logo</span>
+      <div className="user">
+        <img
+          src={currentUser?.photoURL ?? "/default-avatar.png"}
+          alt="profil pic"
+        />
+        <span>{currentUser?.displayName ?? "Anonymous"}</span>
+        <button onClick={signOut} className="logout" type="button">
+          Logout
         </button>
-      ) : ""}
+      </div>
     </nav>
   );
 };

@@ -1,4 +1,7 @@
+import { FieldValue } from "firebase/firestore";
+
 export interface IMessage {
+  senderId: string;
   avatar: string;
   createdAt: any;
   text: string;
@@ -8,10 +11,18 @@ export interface IMessage {
 }
 
 export interface IUser {
-  name: string | null;
-  avatar: string | null;
-  createdAt: any;
+  displayName: string;
+  photoURL: string;
+  createdAt: FieldValue;
   uid: string;
+}
+
+export interface IChat {
+  user1: IUser;
+  user2: IUser;
+  createdAt: any;
+  messages: IMessage[];
+  id: string;
 }
 
 /* 

@@ -1,50 +1,83 @@
-import React, { useState } from "react";
-import { auth, db } from "../firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import React, { useContext, useState } from "react";
+import { db } from "../firebase";
+import {
+  Timestamp,
+  arrayUnion,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { AuthContext } from "../context/AuthContext";
+import { ChatContext, ChatContextType } from "../context/ChatContext";
+import { v4 as uuidv4 } from "uuid";
 
 interface SendMessageProps {
   scroll: React.MutableRefObject<HTMLSpanElement | null>;
 }
 
 const SendMessage: React.FC<SendMessageProps> = ({ scroll }) => {
-  const [message, setMessage]: [string, React.Dispatch<React.SetStateAction<string>>] = useState("");
+  const [text, setText] = useState<string | undefined>("");
+  const { currentUser } = useContext(AuthContext);
+  const chatContext = useContext<ChatContextType | undefined>(ChatContext);
+  const data = chatContext?.data;
 
-  const sendMessage = async (
-    event: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    event.preventDefault();
-    if (message.trim() === "") {
-      alert("Enter valid message");
-      return;
+  // https://firebase.google.com/docs/firestore/manage-data/add-data#update-data
+  const handleSend = async () => {
+    if (data?.chatId !== "null") {
+      console.log("data", data);
+      await updateDoc(doc(db, "chats", data?.chatId || ""), {
+        messages: arrayUnion({
+          id: uuidv4(),
+          text,
+          senderId: currentUser?.uid,
+          date: Timestamp.now(),
+        }),
+      });
     }
-    const { uid, displayName, photoURL } = auth.currentUser ?? {};
-    await addDoc(collection(db, "messages"), {
-      text: message,
-      name: displayName,
-      avatar: photoURL,
-      createdAt: serverTimestamp(),
-      uid,
+
+    //We update the lastMessage field in userChats to display it in SideBar.
+    //Also update the date to display from most recent
+    await updateDoc(doc(db, "userChats", currentUser?.uid || ""), {
+      [data?.chatId + ".lastMessage"]: {
+        //dynamic property name
+        text,
+      },
+      [data?.chatId + ".date"]: serverTimestamp(),
     });
-    setMessage("");
-    scroll.current?.scrollIntoView({ behavior: "smooth" })
+
+    //We do the same thing for other user.
+    await updateDoc(doc(db, "userChats", data?.user.uid || ""), {
+      [data?.chatId + ".lastMessage"]: {
+        text,
+      },
+      [data?.chatId + ".date"]: serverTimestamp(),
+    });
+
+    setText("");
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
+  }; // handle hitting Enter to send message
+
   return (
-    <form onSubmit={(event) => sendMessage(event)} className="send-message">
-      <label htmlFor="messageInput" hidden>
-        Enter Message
-      </label>
+    <div className="sendMessage">
       <input
         id="messageInput"
         name="messageInput"
         type="text"
         className="form-input__input"
-        placeholder="type message..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Type message..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
-      <button type="submit">Send</button>
-    </form>
+      <div className="send">
+        <button onClick={handleSend}>Send</button>
+      </div>
+    </div>
   );
 };
 

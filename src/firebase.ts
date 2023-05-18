@@ -22,7 +22,7 @@ const firebaseConfig: FirebaseConfig = {
   projectId: "ts-react-chat",
   storageBucket: "ts-react-chat.appspot.com",
   messagingSenderId: "184304371030",
-  appId: "1:184304371030:web:7d3c11932af2c2383b82f7"
+  appId: "1:184304371030:web:7d3c11932af2c2383b82f7",
 };
 
 // Initialize Firebase
