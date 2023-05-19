@@ -126,7 +126,7 @@ input {
     }
     @include mobile {
       width: 100%;
-      height: 100%;
+      height: 100vh;
     }
   }
 
@@ -329,7 +329,6 @@ input {
     }
 
     .sendMessage {
-      bottom: 0px;
       width: 100%;
       padding: 10px 10px;
       background-color: $darkColor;
