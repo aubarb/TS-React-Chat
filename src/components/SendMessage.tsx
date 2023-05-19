@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { toast } from "react-toastify";
 import { db } from "../firebase";
 import {
   Timestamp,
@@ -23,17 +24,21 @@ const SendMessage: React.FC<SendMessageProps> = ({ scroll }) => {
 
   // https://firebase.google.com/docs/firestore/manage-data/add-data#update-data
   const handleSend = async () => {
-    if (data?.chatId !== "null") {
-      console.log("data", data);
-      await updateDoc(doc(db, "chats", data?.chatId || ""), {
-        messages: arrayUnion({
-          id: uuidv4(),
-          text,
-          senderId: currentUser?.uid,
-          date: Timestamp.now(),
-        }),
-      });
+    console.log(data);
+    if (!data || data.chatId === "null") {
+      // Display an error or handle the case where no user is selected
+      toast.error("Please select a user first");
+      return;
     }
+
+    await updateDoc(doc(db, "chats", data?.chatId || ""), {
+      messages: arrayUnion({
+        id: uuidv4(),
+        text,
+        senderId: currentUser?.uid,
+        date: Timestamp.now(),
+      }),
+    });
 
     //We update the lastMessage field in userChats to display it in SideBar.
     //Also update the date to display from most recent

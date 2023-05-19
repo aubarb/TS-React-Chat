@@ -45,12 +45,18 @@ $lightColor: hsl(219, 69%, 75%, 30%);
 $buttonColor: hsl(219, 51%, 28%);
 $whiteTextColor: white;
 $lightTextColor: lightgrey;
+$titleFont: "Kanit", sans-serif;
+$textFont: "Titillium Web", sans-serif;
+$lightFont: "Alexandria", sans-serif;
 
 /* BACKGROUND */
 #video1 {
   position: absolute;
   z-index: -1;
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  overflow: hidden;
   filter: brightness(1) blur(8px);
 }
 
@@ -62,6 +68,7 @@ body {
   max-width: 100vw;
   font-size: 16px;
   font-family: sans-serif;
+  font-family: $textFont;
 }
 button,
 input {
@@ -77,6 +84,10 @@ input {
   padding-top: 5%;
   text-align: center;
   color: $whiteTextColor;
+
+  h1 {
+    font-family: $titleFont;
+  }
 
   p {
     font-size: 1rem;
@@ -104,18 +115,18 @@ input {
   .container {
     box-shadow: 5px 5px 10px rgb(0, 0, 0);
     border-radius: 10px;
-    width: 65%;
+    width: 70%;
     height: 80%;
     display: flex;
     overflow: hidden;
 
     @include tablet {
+      width: 95%;
+      height: 95%;
+    }
+    @include mobile {
       width: 100%;
       height: 100%;
-    }
-    @include laptop() {
-      width: 90%;
-      height: 90%;
     }
   }
 
@@ -190,6 +201,7 @@ input {
           background-color: transparent;
           border: none;
           color: $whiteTextColor;
+          font-family: $lightFont;
           outline: none;
 
           &::placeholder {
@@ -219,11 +231,12 @@ input {
 
       .userChatInfo {
         span {
-          font-size: 1.2rem;
+          font-size: 0.9rem;
           font-weight: 500;
         }
         p {
-          font-size: 1rem;
+          font-family: $lightFont;
+          font-size: 0.7rem;
           color: $lightTextColor;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -325,11 +338,11 @@ input {
       input {
         height: 40px;
         padding: 10px 10px;
+        font-size: 0.8rem;
         border-radius: 5px 0 0 5px;
         border: none;
         flex-grow: 1;
         background-color: white;
-        font-size: 1rem;
         outline: none;
 
         &::placeholder {

@@ -18,9 +18,21 @@ const Chat: React.FC = () => {
       <div className="chatInfo">
         <span>{data?.user.displayName}</span>
         <div className="chatIcons">
-          <img src={Cam} alt="camera" onClick={() => toast.error("Available soon!")}/>
-          <img src={Add} alt="Add friend" onClick={() => toast.error("Available soon!")}/>
-          <img src={More} alt="More" onClick={() => toast.error("Available soon!")}/>
+          <img
+            src={Cam}
+            alt="camera"
+            onClick={() => toast.error("Available soon!")}
+          />
+          <img
+            src={Add}
+            alt="Add friend"
+            onClick={() => toast.error("Available soon!")}
+          />
+          <img
+            src={More}
+            alt="More"
+            onClick={() => toast.error("Available soon!")}
+          />
         </div>
       </div>
       <Messages />
