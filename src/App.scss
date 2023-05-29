@@ -69,6 +69,7 @@ body {
   font-size: 16px;
   font-family: sans-serif;
   font-family: $textFont;
+  margin: 0;
 }
 button,
 input {
@@ -252,8 +253,7 @@ input {
 
   .chat {
     flex: 2;
-    @include mobile {
-    }
+    flex-direction: column;
 
     .chatInfo {
       height: 50px;
@@ -281,7 +281,7 @@ input {
       height: calc(
         100% - 110px
       ); /* We want to take full height minus top (chatinfo 50px) and bottom (sendMessage 60px) */
-      overflow: scroll;
+      overflow-y: scroll;
 
       .message {
         display: flex;
@@ -333,6 +333,9 @@ input {
       padding: 10px 10px;
       background-color: $darkColor;
       display: flex;
+      flex-shrink: 0;
+      visibility: visible !important;
+      z-index: 1;
 
       input {
         height: 40px;
