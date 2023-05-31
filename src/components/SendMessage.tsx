@@ -22,6 +22,9 @@ const SendMessage: React.FC<SendMessageProps> = ({ scroll }) => {
   const chatContext = useContext<ChatContextType | undefined>(ChatContext);
   const data = chatContext?.data;
 
+  console.log(currentUser);
+  console.log(data);
+
   // https://firebase.google.com/docs/firestore/manage-data/add-data#update-data
   const handleSend = async () => {
     console.log(data);
